@@ -25,10 +25,18 @@ public class Hotel{
     }
     
     public void createRates(){
-		for(int i = 0; i<30; i++){
+		for(int i = 0; i < 30; i++){
 			this.ratesList.add(1f);
 		}
 	}
+    
+    public void modifyRatesList(int dateToModify, float newRate) {
+    	for(int i = 0; i < this.ratesList.size(); i++) {
+    		if(i+1 == dateToModify) {
+    			this.ratesList.set(i, newRate);
+    		}
+    	}
+    }
     
     public boolean createRooms(int numStandard, int numDeluxe, int numExec){
     	if((numStandard + numDeluxe + numExec) < 1 || (numStandard + numDeluxe + numExec) > 50)
@@ -75,7 +83,7 @@ public class Hotel{
     	if(!(checkOut > 1 && checkOut <= 31) || checkOut <= checkIn){
     		return false;
     	}
-    	if(checkIn == checkOut) {
+    	if(checkOut == checkIn) {
     		return false;
     	}
     	
@@ -148,19 +156,7 @@ public class Hotel{
     	}
     	return false;	
     }
-    /*
-    //specific dates and room free up
-    public void removeReservation(int roomNum, int checkIn, int checkOut) {
-    	// this dont make sense pala ata
-    }
-    */
     
-    /*
-    public boolean bookReservation(int checkIn, int checkOut, String guestName, int roomNum) {
-    	this.bookRoom(checkIn, checkOut, roomNum);
-    	
-    }
-    */
     
     //numRooms is num of rooms to add
 	/**

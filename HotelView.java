@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -23,7 +24,8 @@ public class HotelView {
 	 * 3 - manageHotelPnl
 	 * 4 - bookReservationPnl
 	 * 5 - manageHotelPnl
-	 * 6 - viewReservationPnl
+	 * 6 - viewReservationAndRatesPnl
+	 * 7 - modifydatespanel
 	 * */
 	private ArrayList<JButton> buttonList = new ArrayList<JButton>();
 	/*Legend
@@ -47,6 +49,7 @@ public class HotelView {
 	 * 17 - addExecutiveRoom
 	 * 18 -chooseHotelBookReservation
 	 * 19 -finalizeReservation
+	 * 20 - datePriceModifier
 	 * */
 	private ArrayList<JButton> confirmationButtonList = new ArrayList<JButton>();
 	/*Legend
@@ -66,6 +69,8 @@ public class HotelView {
 	 * 13 - addDeluxeRoomsNo
 	 * 14 -addExecutiveRoomsYes
 	 * 15 -addExecutiveRoomsNo
+	 * 16 - datemodifierYes
+	 * 17 - datemodifierNo
 	 */
 	private ArrayList<JButton> returnButtonList = new ArrayList<JButton>();
 	/*Legend
@@ -100,7 +105,7 @@ public class HotelView {
 	 * 21 - finalizeBookingPrompt
 	 * 22 - roomListBookReservation
 	 * 23 -discountCode
-	 * 24 - discountCodePrompt
+	 * 24 - rateForSpecificDay
 	 */
 	private ArrayList<JTextField> textFieldList = new ArrayList<JTextField>();
 	/*Legend
@@ -127,8 +132,12 @@ public class HotelView {
 	 * 20 -checkOut
 	 * 21 -chooseRoomBookReservation
 	 * 22 - inputDiscountCode
+	 * 23 - datePriceModifier
 	 */
-	
+	private ArrayList<JComboBox> comboBoxList = new ArrayList<JComboBox>();
+	/* 0 - datesRatesListManageHotel
+	 * 
+	 */
 	public HotelView() {
 		this.frame = new JFrame();
 		
@@ -159,12 +168,13 @@ public class HotelView {
 		this.createPanel("Book a Reservation:");
 		this.createPanel("Reservation Info");
 		
+		this.createPanelComponents();
 		
 		//making commponenents of main panels
-		this.hotelCreationMenu();
-		this.viewHotelMenu();
-		this.manageHotelMenu();
-		this.bookReservation();
+		this.hotelCreationMenuPanelSetup();
+		this.viewHotelMenuPanelSetup();
+		this.manageHotelMenuPanelSetup();
+		this.bookReservationPanelSetup();
 		
 		//adding panels to frame
 		for(int i = 0; i < this.panelList.size(); i++) {
@@ -211,6 +221,10 @@ public class HotelView {
 		this.buttonList.get(8).addActionListener(actionListener);
 	}
 	
+	public void setViewReservationComboBox(ActionListener actionListener) {
+		this.comboBoxList.get(1).addActionListener(actionListener);
+	}
+	
 	public void setChooseManageHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(9).addActionListener(actionListener);
 	}
@@ -245,6 +259,14 @@ public class HotelView {
 	
 	public void setAddExecutiveActnListener(ActionListener actionListener) {
 		this.buttonList.get(17).addActionListener(actionListener);
+	}
+	
+	public void setDateModifierActnListener(ActionListener actionListener) {
+		this.buttonList.get(20).addActionListener(actionListener);
+	}
+	
+	public void setDatesRatesListCmBxActnListener(ActionListener actionListener) {
+		this.comboBoxList.get(0).addActionListener(actionListener);
 	}
 	
 	public void setConfirmChangeNameYesActnListener(ActionListener actionListener) {
@@ -311,6 +333,14 @@ public class HotelView {
 		this.confirmationButtonList.get(15).addActionListener(actionListener);
 	}
 	
+	public void setConfirmModifyRateOnDateYesActnListener(ActionListener actionListener) {
+		this.confirmationButtonList.get(16).addActionListener(actionListener);
+	}
+	
+	public void setConfirmModifyRateOnDateNoActnListener(ActionListener actionListener) {
+		this.confirmationButtonList.get(17).addActionListener(actionListener);
+	}
+	
 	public void setChooseHotelBookReservationActnListener(ActionListener actionListener) {
 		this.buttonList.get(18).addActionListener(actionListener);
 	}
@@ -324,8 +354,6 @@ public class HotelView {
 			this.returnButtonList.get(i).addActionListener(actionListener);
 		}
 	}
-	
-	
 	
 	public void setDisplayText(String list, int areaIndex) {
 		this.textAreaList.get(areaIndex).setText(list);
@@ -362,7 +390,7 @@ public class HotelView {
 	
 	private void createTextArea(String initialText) {
 		this.textAreaList.add(new JTextArea(initialText));
-		
+		System.out.println(this.textAreaList.size()-1 + " " + initialText);
 		for(int i = 0; i < this.textAreaList.size(); i++) {
 			this.textAreaList.get(i).setEditable(false);
 			this.textAreaList.get(i).setOpaque(false);
@@ -403,23 +431,123 @@ public class HotelView {
 			this.textAreaList.get(textAreaIndex).setText("");
 	}
 	
-	private void hotelCreationMenu() {
+	private void createPanelComponents() {
+		this.createTextArea("");//TEXT AREA for hotel list for hotel creation panel
+		this.createTextField();//TEXT FIELD for hotel name input
+		this.createTextField();//TEXT FIELD for number of standard rooms
+		this.createTextField();//TEXT FIELD for number of deluxe rooms
+		this.createTextField();//TEXT FIELD for number of executive rooms
+		this.createTextField();//TEXT FIELD for hotel's base price
+		this.createButton("Finalize Hotel");//BUTTON for submitting finalized hotel to then be created
+		this.createTextArea("");//TEXT AREA for showing user input feedback
+		
+		this.createTextArea("");//TEXT AREA for showing list of hotels in viel Hotel Panel
+		this.createTextField();//TEXT FIELD for inputting which hotel to view
+		this.createButton("View Chosen Hotel");//BUTTON for choosing to view inputted hotel
+		this.createButton("Check Date");//BUTTON to check rooms available on a certain date
+		this.createButton("View Room Info");///BUTTON to view inputted room's information
+		this.createButton("View Reservation Info");//BUTTON for viewing inputted reservation
+		this.createTextField();//TEXT FIELD for checking of availability of rooms on certain date
+		this.createTextField();//TEXT FIELD for inputting which room to view
+		this.createTextField();//TEXT FIELD for inputting which reservation to view
+		this.createTextArea("");//TEXT AREA for prompt of check room availability on certain date function
+		this.createTextArea("");//Text area for showing available rooms for certain date
+		this.createTextArea("");//TEXT AREA for  showing list of rooms
+		this.createTextArea("");//TEXT AREA for showing room info
+		this.createTextArea("");//TEXT AREA for showing reservation list
+		this.createTextArea("");//TEXT AREA for showing chosen reservation info
+		this.createTextArea("Hotel Does not Exist");//TEXT AREA for view hotel high level info
+		
+		this.createTextArea("");//TEXT AREA for List of hotels for manage hotel panel
+		this.createTextField();//TEXT FIELD for inputting which hotel to manage
+		this.createButton("Manage Chosen Hotel");//BUTTON for submitting which hotel to view
+		this.createTextArea("");//TEXT AREA for prompt to change hotel name
+		this.createTextField();//TEXT FIELD for inputting new hotel name
+		this.createButton("Change Hotel's Name");//BUTTON for submitting new hotel name
+		this.createTextArea("");//TEXT AREA for showing current number of rooms for each type
+		this.createTextField();//TEXT FIELD for inputting number of standard rooms to add
+		this.createButton("Add this Amount of Standard");//BUTTON for submitting amount of standard to add
+		this.createTextArea("");//TEXT AREA for showing list of rooms
+		this.createTextField();//TEXT FIELD for inputting which room to remove
+		this.createButton("Remove Chosen Room");//BUTTON for submitting which room to remove
+		this.createTextArea("");//TEXT AREA for showing current base price
+		this.createTextField();//TEXT FIELD for inputting new hotel base price
+		this.createButton("Update Base Price");//BUTTON for submitting new hotel base price
+		this.createTextArea("");//TEXT AREA for showing hotel list
+		this.createTextField();//TEXT FIELD for inputting  which reservation number to remove
+		this.createButton("Remove Reservation");//BUTTON for submitting which reservation to remove
+		this.createButton("DELETE Hotel");//BUTTON for removing hotel
+		this.createTextField();//TEXT FIELD for inputting number of deluxe to add
+		this.createButton("Add this Amount of Deluxe");//BUTTON for submitting amount of deluxe to add
+		this.createTextField();//TEXT FIELD for inputting number of executive to add
+		this.createButton("Add this Amount of Executive");//BUTTON for submitting amount of executive to aadd
+		//BUTTONs for confirming changes to hotel name
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming changes to adding standard rooms
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming changes to removing rooms
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming changes base price
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming changes to removing reservation
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming deletion of hotel
+		this.createConfirmationButton("CONFIRM DELETE");
+		this.createConfirmationButton("Wag nalang");
+		//BUTTONs for confirming changes to number of deluxe
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTONs for confirming changes to number of executive
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		//BUTTON FOR CONFIRMING changes to date rates
+		this.createConfirmationButton("Confirm Changes");
+		this.createConfirmationButton("Discard Changes");
+		
+		this.createTextArea("");//TEXT AREA for showing list of hotels for book reservation panel
+		this.createTextArea("Input Hotel To Book Into:");//TEXT AREA for prompt of which hotel to book into
+		this.createTextField();//TEXT FIELD for input of which hotel to book into
+		this.createButton("Choose This Hotel");// BUTTON for submitting which hotel to book into
+		this.createTextArea("Input Guest Name:");//TEXT AREA for for prompt of guestname
+		this.createTextField();//TEXT FIELD for guestname
+		this.createTextArea("Input Check-In");//TEXT AREA for prompt of checkin date
+		this.createTextField();//TEXT FIELD for checkin
+		this.createTextArea("Input Check-Out");//TEXT AREA for prompt of checkout date
+		this.createTextField();//TEXT FIELD for input of checkout
+		this.createTextArea("");//TEXT AREA for room list
+		this.createTextField();//TEXT FIELD for input of room to book into
+		this.createTextArea("");//TEXT AREA for input feedback
+		this.createTextArea("Input Discount Code (Leave blank if none):");//TEXT AREA for inputting discount code
+		this.createTextField();//TEXT FIELD for input ofdiscount code
+		this.createButton("Finalize Reservation");// BUTTON for submitting finalized reservation
+		
+		this.createTextArea("");//TEXT AREA for date price modifier
+		this.createTextField();//TEXT FIELD for date price modifier
+		this.createButton("Change Rate for this Date");//BUTTON for date price modifier
+		
+		String[] dates = new String[30];
+		for(int i = 0; i < 30; i++) {
+			dates[i] = "" + (i + 1);
+		}
+		this.comboBoxList.add(new JComboBox(dates));
+		
+		this.comboBoxList.add(new JComboBox());
+	}
+	
+	private void hotelCreationMenuPanelSetup() {
 		this.panelList.get(1).setLayout(new FlowLayout(FlowLayout.LEFT, 125, 5));
 		this.panelList.get(1).setPreferredSize(new Dimension(400, 450));
-		
-		this.createTextArea("");
 		
 		JLabel hotelNameInputLbl = new JLabel("Hotel Name:");
 		JLabel numStanInputLbl = new JLabel("Number of Standard Rooms:");
 		JLabel numDelInputLbl = new JLabel("Number of Deluxe Rooms:");
 		JLabel numExecInputLbl = new JLabel("Number of Executive Rooms:");
 		JLabel basePriceInputLbl = new JLabel("Input Hotel's Base Price:");
-		
-		this.createTextField();
-		this.createTextField();
-		this.createTextField();
-		this.createTextField();
-		this.createTextField();
 		
 		this.panelList.get(1).add(this.textAreaList.get(0));
 		this.panelList.get(1).add(hotelNameInputLbl);
@@ -433,22 +561,19 @@ public class HotelView {
 		this.panelList.get(1).add(basePriceInputLbl);
 		this.panelList.get(1).add(this.textFieldList.get(4));
 		
-		this.createButton("Finalize Hotel");
 		
 		this.panelList.get(1).add(this.buttonList.get(4));
-		this.createTextArea("");
 		this.panelList.get(1).add(this.textAreaList.get(1));
 	}
 	
-	private void viewHotelMenu() {
+	private void viewHotelMenuPanelSetup() {
 		this.panelList.get(2).setPreferredSize(new Dimension(450, 800));
-		 this.createTextArea("");
 		 
 		JLabel chooseHotelLabel = new JLabel("Input Hotel to be Viewed                    ");
-		this.createTextField();
+		
 		this.textFieldList.get(5).setEditable(false);
 		this.textFieldList.get(5).setText("No Hotels Currently Exist");
-		this.createButton("View Chosen Hotel");
+		
 		this.buttonList.get(5).setEnabled(false);
 		
 		this.panelList.get(2).add(this.textAreaList.get(2));
@@ -458,28 +583,15 @@ public class HotelView {
 		//this.panelList.get(2).add(viewHotelHeaderLbl);
 		
 		
-		this.createButton("Check Date");
-		this.createButton("View Room Info");
-		this.createButton("View Reservation Info");
 		this.buttonList.get(6).setVisible(false);
 		this.buttonList.get(7).setVisible(false);
 		this.buttonList.get(8).setVisible(false);
 		
-		this.createTextField();
-		this.createTextField();
-		this.createTextField();
+		
 		this.textFieldList.get(6).setVisible(false);
 		this.textFieldList.get(7).setVisible(false);
 		this.textFieldList.get(8).setVisible(false);
 		
-		
-		this.createTextArea("");//for showing dates to choose from?
-		this.createTextArea("");//text area for showing available rooms for certain date
-		this.createTextArea("");//showing list of rooms
-		this.createTextArea("");//showing room info
-		this.createTextArea("");//show reservation list
-		this.createTextArea("");// reservation info
-		this.createTextArea("Hotel Does not Exist");//viewHotel header
 		
 		this.textAreaList.get(3).setVisible(false);
 		this.textAreaList.get(4).setVisible(false);
@@ -488,6 +600,7 @@ public class HotelView {
 		this.textAreaList.get(7).setVisible(false);
 		this.textAreaList.get(8).setVisible(false);
 		this.textAreaList.get(9).setVisible(false);
+		
 		
 		this.textFieldList.get(6).setColumns(5);
 		this.buttonList.get(6).setPreferredSize(new Dimension(135, 25));
@@ -505,52 +618,21 @@ public class HotelView {
 		this.panelList.get(2).add(this.textAreaList.get(6));
 		
 		this.panelList.get(2).add(this.textAreaList.get(7));
-		this.panelList.get(2).add(this.textFieldList.get(8));
-		this.panelList.get(2).add(this.getButtonList().get(8));
-		this.panelList.get(2).add(this.textAreaList.get(8));
+		//this.panelList.get(2).add(this.textFieldList.get(8));
+		this.panelList.get(2).add(this.comboBoxList.get(1));
+		//this.panelList.get(2).add(this.getButtonList().get(8));
+		//this.panelList.get(2).add(this.textAreaList.get(8));
+		
 		
 	}
 	
-	private void manageHotelMenu() {
+	private void manageHotelMenuPanelSetup() {
 		this.panelList.get(3).setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 		this.panelList.get(3).setPreferredSize(new Dimension(400, 800));
-		this.createTextArea("");//List of hotels
-		this.createTextField();
-		this.createButton("Manage Chosen Hotel");
 		
 		this.panelList.get(3).add(this.textAreaList.get(10));
 		this.panelList.get(3).add(this.textFieldList.get(9));
 		this.panelList.get(3).add(this.buttonList.get(9));
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createButton("Change Hote's Name");
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createButton("Add this Amount of Standard");
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createButton("Remove Chosen Room");
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createButton("Update Base Price");
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createButton("Remove Reservation");
-		
-		this.createButton("Remove Hotel");
-		
-		//this.createTextArea("");
-		this.createTextField();
-		this.createButton("Add this Amount of Deluxe");
-		
-		//this.createTextArea("");
-		this.createTextField();
-		this.createButton("Add this Amount of Executive");
 		
 		/*
 		this.buttonList.get(10).setPreferredSize(new Dimension(100, 25));
@@ -574,33 +656,6 @@ public class HotelView {
 		this.textFieldList.get(15).setColumns(15);
 		this.textFieldList.get(16).setColumns(15);
 		
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("CONFIRM DELETION");
-		this.createConfirmationButton("Wag nalang");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		this.createConfirmationButton("Confirm Changes");
-		this.createConfirmationButton("Discard Changes");
-		
-		
-		
 		//setting things to initially not visible
 		for(int i = 11; i < 16; i++) {
 			this.textAreaList.get(i).setVisible(false);
@@ -617,6 +672,13 @@ public class HotelView {
 		for(int i = 0; i < this.confirmationButtonList.size(); i++) {
 			this.confirmationButtonList.get(i).setVisible(false);
 		}
+		
+		this.textAreaList.get(24).setVisible(false);
+		this.textFieldList.get(23).setVisible(false);
+		this.buttonList.get(20).setVisible(false);
+		this.comboBoxList.get(0).setVisible(false);
+		
+		this.textFieldList.get(23).setColumns(17);
 		
 		//add to panel
 		this.panelList.get(3).add(this.textAreaList.get(11));
@@ -657,37 +719,22 @@ public class HotelView {
 		this.panelList.get(3).add(this.confirmationButtonList.get(8));
 		this.panelList.get(3).add(this.confirmationButtonList.get(9));
 		
+		this.panelList.get(3).add(this.textAreaList.get(24));
+		this.panelList.get(3).add(this.comboBoxList.get(0));
+		this.panelList.get(3).add(this.textFieldList.get(23));
+		this.panelList.get(3).add(this.buttonList.get(20));
+		this.panelList.get(3).add(this.confirmationButtonList.get(16));
+		this.panelList.get(3).add(this.confirmationButtonList.get(17));
+		
 		this.panelList.get(3).add(this.buttonList.get(15));
 		this.panelList.get(3).add(this.confirmationButtonList.get(10));
 		this.panelList.get(3).add(this.confirmationButtonList.get(11));
 		
 	}
 	
-	private void bookReservation() {
+	private void bookReservationPanelSetup() {
 		this.panelList.get(4).setPreferredSize(new Dimension(400, 800));
-		this.createTextArea("");
-		this.createTextArea("Input Hotel To Book Into:");
-		this.createTextField();
-		this.createButton("Choose This Hotel");
 		
-		this.createTextArea("Input Guest Name:");
-		this.createTextField();
-		
-		this.createTextArea("Input Check-In");
-		this.createTextField();
-		this.createTextArea("Input Check-Out");
-		this.createTextField();
-		this.createTextArea("");
-		
-		this.createTextArea("");
-		this.createTextField();
-		this.createTextArea("");
-		
-		this.createTextArea("Input Discount Code");
-		this.createTextField();
-		this.createTextArea("");
-		
-		this.createButton("Finalize Reservation");
 		
 		this.panelList.get(4).add(this.textAreaList.get(16));
 		this.panelList.get(4).add(this.textAreaList.get(17));
@@ -704,7 +751,10 @@ public class HotelView {
 		
 		this.panelList.get(4).add(this.textAreaList.get(22));
 		this.panelList.get(4).add(this.textFieldList.get(21));
-
+		
+		this.panelList.get(4).add(this.textAreaList.get(23));
+		this.panelList.get(4).add(this.textFieldList.get(22));
+		
 		this.panelList.get(4).add(this.buttonList.get(19));
 		this.panelList.get(4).add(this.textAreaList.get(21));
 	}
@@ -727,5 +777,9 @@ public class HotelView {
 	
 	public ArrayList<JButton> getConfirmationButtonList(){
 		return this.confirmationButtonList;
+	}
+	
+	public ArrayList<JComboBox> getComboBoxList() {
+		return this.comboBoxList;
 	}
 }

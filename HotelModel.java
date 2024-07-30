@@ -14,7 +14,7 @@ public class HotelModel {
 			if(Integer.parseInt(numStandard) + Integer.parseInt(numDeluxe) + Integer.parseInt(numExec) <= 50 && 
 					Integer.parseInt(numStandard) + Integer.parseInt(numDeluxe) + Integer.parseInt(numExec) >= 1 && 
 					Integer.parseInt(numStandard) >= 0 && Integer.parseInt(numDeluxe) >= 0 && Integer.parseInt(numExec) >= 0 &&
-					this.getHotelIndex(hotelName) == -1 && Float.parseFloat(price) >= 100f) {
+					this.getHotelIndex(hotelName) == -1 && Float.parseFloat(price) >= 100f && !(hotelName.equals(""))) {
 				
 				this.hotelList.add(new Hotel(hotelName, Integer.parseInt(numStandard), Integer.parseInt(numDeluxe), Integer.parseInt(numExec), Float.parseFloat(price)));
 				result = true;
@@ -171,13 +171,28 @@ public class HotelModel {
 		return valid;
 	}
 	
+	public boolean modifyRateOnDate(String dateToModify, String newRate, String hotelIndex) {
+		boolean valid = false;
+		
+		try {
+			if(Integer.parseInt(dateToModify) >= 1 && Integer.parseInt(dateToModify) <= 30 && Float.parseFloat(newRate) >= 0) {
+				valid = true;
+			}
+		}
+		catch(Exception e) {
+			System.out.println("Error: " + e);
+		}
+		
+		return valid;
+	}
+	
 	public boolean finalizeReservation(String guestName, String checkIn, String checkOut, String roomChosen, String discountCode, String hotelIndex) {
 		boolean valid = false;
 		
 		try {
 			if(Integer.parseInt(checkIn) >= 1 && Integer.parseInt(checkIn) <= 30 && Integer.parseInt(checkOut) >=2 && Integer.parseInt(checkOut) <= 31
-					&& Integer.parseInt(checkOut) > Integer.parseInt(checkIn) && 
-					hotelList.get(Integer.parseInt(hotelIndex)).getRoomIndex(Integer.parseInt(roomChosen)) != -1) {
+					&& Integer.parseInt(checkOut) > Integer.parseInt(checkIn) && hotelList.get(Integer.parseInt(hotelIndex)).getRoomIndex(Integer.parseInt(roomChosen)) != -1
+					&& (discountCode.equals("I_WORK_HERE") || discountCode.equals("STAY4_GET1") || discountCode.equals("PAYDAY") || discountCode.equals("")) && !(guestName.equals(""))) {
 				if(this.hotelList.get(Integer.parseInt(hotelIndex)).bookReservation(guestName, Integer.parseInt(checkIn), Integer.parseInt(checkOut), Integer.parseInt(roomChosen), discountCode))  {
 					valid = true;
 				}

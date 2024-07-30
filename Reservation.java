@@ -6,6 +6,7 @@ public class Reservation{
     private int checkOut;
     private Room room;
     private ArrayList<Float> ratesList = new ArrayList<Float>();
+    private ArrayList<Float> costPerNightList = new ArrayList<Float>();
     private String discountCode;
 
     
@@ -20,8 +21,11 @@ public class Reservation{
     	this.room = room;
     	this.discountCode = discountCode;
     	this.ratesList = ratesList;
+    	
+    	this.setCostPerNightList();
     }
     
+    //gets passed hotels updated rates list 
     public boolean changeRatesList(ArrayList<Float> ratesList){
 		this.ratesList = ratesList;
 		return true;
@@ -65,9 +69,8 @@ public class Reservation{
             }
         }
         if(this.discountCode.equals("PAYDAY")){
-            ArrayList<Integer> days = getDaysStay();
-            for(i = 0; i<days.size(); i++){  // change to -1 in case that checkout is included
-                if(days.get(i) == 15 || days.get(i) == 28){
+            for(i = 0; i< getDaysStay().size(); i++){  // change to -1 in case that checkout is included
+                if(getDaysStay().get(i) == 15 || getDaysStay().get(i) == 28){
                     return sum * 0.93f;
                 }
             }
@@ -115,16 +118,14 @@ public class Reservation{
     	return this.room;
     }
     
-    public void displayPrice(ArrayList<Float> ratesList){
-        int i = 0;
-        System.out.print("Cost per night: [");
-        for(i = 0; i<getDaysStay().size(); i++){
-            System.out.print(ratesList.get(getDaysStay().get(i)) * 100 + "%");
-            if(i!=getDaysStay().size()-1){
-                System.out.print(", ");
-            }
+    public void setCostPerNightList(){
+        for(int i = 0; i < getDaysStay().size(); i++){
+            this.costPerNightList.add(this.room.getPrice() * this.ratesList.get(i));
         }
-        System.out.println("]");
+    }
+    
+    public ArrayList<Float> getCostPerNightList(){
+    	return this.costPerNightList;
     }
 }
 

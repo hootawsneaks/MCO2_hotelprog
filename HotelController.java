@@ -37,7 +37,7 @@ public class HotelController {
 						
 					}
 					else {
-						hotelView.setDisplayText("Invalid Input/s:\n Hotel Name must be unique\n Total number of rooms cannot exceed 50\n Base Price At least 100\n", 1);
+						hotelView.setDisplayText("Invalid Input/s:\n Hotel Name must be unique and valid\n Total number of rooms cannot exceed 50\n Base Price At least 100\n", 1);
 					}
 				}
 			});
@@ -73,7 +73,7 @@ public class HotelController {
 					hotelView.getButtonList().get(8).setVisible(true);
 					hotelView.getTextFieldList().get(6).setVisible(true);
 					hotelView.getTextFieldList().get(7).setVisible(true);
-					hotelView.getTextFieldList().get(8).setVisible(true);
+					//hotelView.getTextFieldList().get(8).setVisible(true);
 					hotelView.getTextAreaList().get(3).setVisible(true);
 					hotelView.getTextAreaList().get(4).setVisible(false);
 					hotelView.getTextAreaList().get(5).setVisible(true);
@@ -81,12 +81,15 @@ public class HotelController {
 					hotelView.getTextAreaList().get(7).setVisible(true);
 					hotelView.getTextAreaList().get(8).setVisible(false);
 					hotelView.getTextAreaList().get(9).setVisible(true);
+					hotelView.getComboBoxList().get(1).removeAllItems();
+					hotelView.getComboBoxList().get(1).setVisible(true);
 					
 					String hotelInfo = "Hotel Info:                \n";
 					hotelInfo = hotelInfo + "Hotel name: " + hotelModel.getHotelList().get(hotelIndex).getHotelName() + "\n";
-					hotelInfo = hotelInfo + "   Standard Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumStandard() + "\n";
-					hotelInfo = hotelInfo + "   Deluxe Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumDeluxe() + "\n";
-					hotelInfo = hotelInfo + "   Executive Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumExec() + "\n";
+					hotelInfo = hotelInfo + "Standard Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumStandard() + "\n";
+					hotelInfo = hotelInfo + "Deluxe Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumDeluxe() + "\n";
+					hotelInfo = hotelInfo + "Executive Rooms: " + hotelModel.getHotelList().get(hotelIndex).getNumExec() + "\n";
+					hotelInfo = hotelInfo + "Base Price Per Night: " + hotelModel.getHotelList().get(hotelIndex).getPrice() + "\n";
 					hotelInfo = hotelInfo + "Total Earnings: " + hotelModel.getHotelList().get(hotelIndex).getTotalEarnings();
 					hotelView.getTextAreaList().get(9).setText(hotelInfo);
 					
@@ -105,6 +108,7 @@ public class HotelController {
 					
 					hotelView.getTextAreaList().get(5).setText(roomsList);
 			
+					/*
 					String reservationList = "Choose a Reservation to View:                         \n";	
 					if(hotelModel.getHotelList().get(hotelIndex).getReservationsList().size() != 0) {
 						hotelView.getButtonList().get(8).setEnabled(true);
@@ -123,11 +127,36 @@ public class HotelController {
 						hotelView.getTextFieldList().get(8).setEditable(false);
 						hotelView.getTextFieldList().get(8).setText("No Reservations Currently");
 					}
-
 					
 					hotelView.getTextAreaList().get(7).setText(reservationList);
+					*/
 					
+					String reservationList = "Choose a Reservation to View:                         \n";	
+					if(hotelModel.getHotelList().get(hotelIndex).getReservationsList().size() != 0) {
+						reservationList = reservationList + "Guest: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getGuestName() + "\n";
+						reservationList = reservationList + "Booked into Room: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getRoomInfo().getRoomName() + "\n";
+						reservationList = reservationList + "Room Type: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getRoomInfo().getRoomType() + "\n";
+						reservationList = reservationList + "Check-In: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getCheckIn() + "     Check-Out: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getCheckOut() +"\n";
+						reservationList = reservationList + "Total Cost: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getTotalPay() + "\n";
+						reservationList = reservationList + "Cost Per Night: ";
+						newLine = 0;
+						for(int i = 0; i < hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getCostPerNightList().size(); i++) {
+							if(newLine % 10 == 0) {
+								reservationList = reservationList + "\n";
+							}
+							reservationList = reservationList + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getCostPerNightList().get(i) + " | ";
+							newLine++;
+						}
+						for(int i = 0; i < hotelModel.getHotelList().get(hotelIndex).getReservationsList().size(); i++) {
+							hotelView.getComboBoxList().get(1).addItem("" + (i+1));
+						}
+					}
+					else {
+						reservationList = reservationList + "No Reservations Currently";
+						hotelView.getComboBoxList().get(1).removeAllItems();
+					}
 					
+					hotelView.getTextAreaList().get(7).setText(reservationList);
 				}
 				else {
 					hotelView.getTextAreaList().get(9).setText("Hotel Does Not Exist");
@@ -144,6 +173,7 @@ public class HotelController {
 					hotelView.getTextAreaList().get(6).setVisible(false);
 					hotelView.getTextAreaList().get(7).setVisible(false);
 					hotelView.getTextAreaList().get(8).setVisible(false);
+					hotelView.getComboBoxList().get(1).setVisible(false);
 				}
 			}
 		});
@@ -251,6 +281,44 @@ public class HotelController {
 			
 		});
 		
+		this.hotelView.setViewReservationComboBox(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String chosenReservation = "" + hotelView.getComboBoxList().get(1).getSelectedItem();
+				int hotelIndex = hotelModel.getHotelIndex(hotelView.getTextFieldList().get(5).getText());
+				String reservationList = "Choose a Reservation to View:                         \n";	
+				if(hotelModel.getHotelList().get(hotelIndex).getReservationsList().size() != 0) {
+					reservationList = reservationList + "Guest: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getGuestName() + "\n";
+					reservationList = reservationList + "Booked into Room: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getRoomInfo().getRoomName() + "\n";
+					reservationList = reservationList + "Room Type: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getRoomInfo().getRoomType() + "\n";
+					reservationList = reservationList + "Check-In: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getCheckIn() + "     Check-Out: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(0).getCheckOut() +"\n";
+					reservationList = reservationList + "Total Cost: " + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getTotalPay() + "\n";
+					reservationList = reservationList + "Cost Per Night: ";
+					int newLine = 0;
+					for(int i = 0; i < hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getCostPerNightList().size(); i++) {
+						if(newLine % 5 == 0) {
+							reservationList = reservationList + "\n";
+						}
+						reservationList = reservationList + hotelModel.getHotelList().get(hotelIndex).getReservationsList().get(Integer.parseInt(chosenReservation)-1).getCostPerNightList().get(i) + " | ";
+						newLine++;
+					}
+					
+					for(int i = 0; i < hotelModel.getHotelList().get(hotelIndex).getReservationsList().size(); i++) {
+						if(!(hotelView.getComboBoxList().size() > hotelModel.getHotelList().get(hotelIndex).getReservationsList().size())) {
+							hotelView.getComboBoxList().get(1).addItem("" + (i+1));
+						}
+					}
+				}
+				else {
+					reservationList = reservationList + "No Reservations Currently";
+					hotelView.getComboBoxList().get(1).removeAllItems();
+				}
+				
+				hotelView.getTextAreaList().get(7).setText(reservationList);
+			}
+			
+		});
+		
 		this.hotelView.setManageHotelActnListener(new ActionListener() {
 			
 			@Override
@@ -291,6 +359,11 @@ public class HotelController {
 						hotelView.getButtonList().get(i).setVisible(true);
 					}
 					
+					hotelView.getTextAreaList().get(24).setVisible(true);
+					hotelView.getTextFieldList().get(23).setVisible(true);
+					hotelView.getButtonList().get(20).setVisible(true);
+					hotelView.getComboBoxList().get(0).setVisible(true);
+					
 					hotelView.getTextAreaList().get(11).setText("Hotel Name: " + hotelModel.getHotelList().get(hotelIndex).getHotelName() + "                                                                                                          ");
 					
 					displayNumRooms(hotelIndex);
@@ -319,6 +392,11 @@ public class HotelController {
 					
 					hotelView.getTextAreaList().get(15).setText(reservationList);
 					
+					String dateModifierPrompt = "Rates on Days of The Month: \n";
+					dateModifierPrompt = dateModifierPrompt + "Day 1: " + hotelModel.getHotelList().get(hotelIndex).getRatesList().get(0) + " times base price"; 
+					
+					hotelView.getTextAreaList().get(24).setText(dateModifierPrompt);
+					
 					}
 				else {
 					hotelView.getTextAreaList().get(11).setText("Invalid Hotel Input");
@@ -334,6 +412,11 @@ public class HotelController {
 					for(int i = 10; i < 18; i++) {
 						hotelView.getButtonList().get(i).setVisible(false);
 					}
+					
+					hotelView.getTextAreaList().get(24).setVisible(false);
+					hotelView.getTextFieldList().get(23).setVisible(false);
+					hotelView.getButtonList().get(20).setVisible(false);
+					hotelView.getComboBoxList().get(0).setVisible(false);
 				}
 			}
 			
@@ -353,6 +436,9 @@ public class HotelController {
 					if(hotelName.equals(hotelModel.getHotelList().get(i).getHotelName())) {
 						valid = false;
 					}
+				}
+				if(hotelName.equals("")) {
+					valid = false;
 				}
 				
 				if(valid) {
@@ -378,6 +464,8 @@ public class HotelController {
 				hotelView.getConfirmationButtonList().get(1).setVisible(false);
 				hotelView.getTextFieldList().get(10).setText("");
 				hotelView.getTextAreaList().get(11).setText("Hotel Name: " + hotelModel.getHotelList().get(hotelIndex).getHotelName() + "                                                                                                          ");
+				displayHotelList(10);
+				hotelView.getTextFieldList().get(9).setText(newHotelName);
 				unlockManagementInput();
 			}
 		});
@@ -669,6 +757,64 @@ public class HotelController {
 			}
 		});
 		
+		this.hotelView.setDateModifierActnListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String dateSelected = "" + hotelView.getComboBoxList().get(0).getSelectedItem();
+				String hotelIndex = "" + hotelModel.getHotelIndex(hotelView.getTextFieldList().get(9).getText());
+				String newRate = hotelView.getTextFieldList().get(23).getText();
+				
+				boolean valid = hotelModel.modifyRateOnDate(dateSelected, newRate, hotelIndex);
+				
+				if(valid) {
+					hotelView.getConfirmationButtonList().get(16).setVisible(true);
+					hotelView.getConfirmationButtonList().get(17).setVisible(true);
+					lockManagementInput();
+				}
+				else {
+					hotelView.getTextFieldList().get(23).setText("Invalid Price");
+				}
+			}
+		});
+		
+		this.hotelView.setConfirmModifyRateOnDateYesActnListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String dateSelected = "" + hotelView.getComboBoxList().get(0).getSelectedItem();
+				int hotelIndex = hotelModel.getHotelIndex(hotelView.getTextFieldList().get(9).getText());
+				String newRate = hotelView.getTextFieldList().get(23).getText();
+				
+				hotelView.getConfirmationButtonList().get(16).setVisible(false);
+				hotelView.getConfirmationButtonList().get(17).setVisible(false);
+				unlockManagementInput();
+				
+				hotelModel.getHotelList().get(hotelIndex).modifyRatesList(Integer.parseInt(dateSelected), Float.parseFloat(newRate));
+				
+				String rateForDay = "Rates on Days of The Month: \n";
+				rateForDay = rateForDay +  "Day " + dateSelected + ": ";
+				
+				rateForDay = rateForDay + hotelModel.getHotelList().get(hotelIndex).getRatesList().get(Integer.parseInt(dateSelected)-1) + " times base price";
+				
+				hotelView.getTextAreaList().get(24).setText(rateForDay);
+				hotelView.getTextFieldList().get(23).setText("");
+			}
+		});
+		
+		this.hotelView.setDatesRatesListCmBxActnListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				String dateSelected = "" + hotelView.getComboBoxList().get(0).getSelectedItem();
+				int hotelIndex = hotelModel.getHotelIndex(hotelView.getTextFieldList().get(9).getText());
+				
+				String rateForDay = "Rates on Days of The Month: \n";
+				rateForDay = rateForDay +  "Day " + dateSelected + ": ";
+				
+				rateForDay = rateForDay + hotelModel.getHotelList().get(hotelIndex).getRatesList().get(Integer.parseInt(dateSelected)-1) + " times base price";
+				
+				hotelView.getTextAreaList().get(24).setText(rateForDay);
+			}
+		});
+		
 		this.hotelView.setRemoveHotelActnListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -809,7 +955,15 @@ public class HotelController {
 				hotelView.getConfirmationButtonList().get(11).setVisible(false);
 				unlockManagementInput();
 			}
-			
+		});
+		
+		this.hotelView.setConfirmModifyRateOnDateNoActnListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				hotelView.getConfirmationButtonList().get(16).setVisible(false);
+				hotelView.getConfirmationButtonList().get(17).setVisible(false);
+				unlockManagementInput();
+			}
 		});
 		
 		this.hotelView.setBookReservationActnListener(new ActionListener() {
@@ -832,12 +986,11 @@ public class HotelController {
 					hotelView.getTextFieldList().get(i).setVisible(false);
 				}
 				
-				for(int i = 18; i < 25; i++) {
+				for(int i = 18; i < 24; i++) {
 					hotelView.getTextAreaList().get(i).setVisible(false);
 				}
 				
 				hotelView.getButtonList().get(19).setVisible(false);
-				
 				
 			}
 			
@@ -850,11 +1003,11 @@ public class HotelController {
 				String hotel = hotelView.getTextFieldList().get(17).getText();
 				
 				if(hotelModel.getHotelIndex(hotel) != -1) {
-					for(int i = 18; i < 22; i++) {
+					for(int i = 18; i < 23; i++) {
 						hotelView.getTextFieldList().get(i).setVisible(true);
 					}
 					
-					for(int i = 18; i < 23; i++) {
+					for(int i = 18; i < 24; i++) {
 						hotelView.getTextAreaList().get(i).setVisible(true);
 					}
 					
@@ -891,7 +1044,7 @@ public class HotelController {
 				if(valid) {
 					hotelView.getTextAreaList().get(21).setVisible(true);
 					hotelView.getTextAreaList().get(21).setText("Booking Successful");
-					for(int i = 18; i < 22; i++) {
+					for(int i = 18; i < 23; i++) {
 						hotelView.getTextFieldList().get(i).setText("");
 					}
 				}
@@ -901,6 +1054,7 @@ public class HotelController {
 				}
 			}
 		});
+		
 		
 		this.hotelView.setReturnActnListener(new ActionListener() {
 			
@@ -940,6 +1094,11 @@ public class HotelController {
 					hotelView.getConfirmationButtonList().get(i).setVisible(false);
 				}
 				
+				hotelView.getTextAreaList().get(24).setVisible(false);
+				hotelView.getTextFieldList().get(23).setVisible(false);
+				hotelView.getButtonList().get(20).setVisible(false);
+				hotelView.getComboBoxList().get(0).setVisible(false);
+				hotelView.getComboBoxList().get(1).setVisible(false);
 				unlockManagementInput();
 			}
 		});
