@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 
+/**
+ * The Reservation class represents a reservation into it's respective hotel
+ * It has a guest name, checkIn and checkOut date, a room, a total cost, a discountCode, list of the cost per night, and a list of the rates of the days.
+ */
 public class Reservation{
     private String guestName;
     private int checkIn;
@@ -11,8 +15,13 @@ public class Reservation{
 
     
     /**
-	 * Class constructor for a reservation; the guest's name, check in date, 
-     * check out date, and room number need to be indicated.
+	 * Class constructor for a reservation; the guest's name, check in date, check out date, and room number to book into, and discountCode to apply need to be indicated.
+	 * @param guestName the name of the guest
+	 * @param checkIn date where guest will checkIn
+	 * @param checkOut date where guest will checkout
+	 * @param room room that guest will occupy
+	 * @param discountCode discountCode to apply to reservation
+	 * @param ratesList list of rates for this reservation
 	 */
     public Reservation(String guestName, int checkIn, int checkOut, Room room, String discountCode, ArrayList<Float> ratesList) {
     	this.guestName = guestName;
@@ -20,12 +29,19 @@ public class Reservation{
     	this.checkOut = checkOut;
     	this.room = room;
     	this.discountCode = discountCode;
+    	if(!(discountCode.equals("I_WORK_HERE")) && !(discountCode.equals("STAY4_GET1")) && !(discountCode.equals("PAYDAY"))) {
+    		this.discountCode = "none";
+    	}
     	this.ratesList = ratesList;
     	
     	this.setCostPerNightList();
     }
     
-    //gets passed hotels updated rates list 
+    /**
+	 * Setter for reservation's list of rates
+	 * @param ratesList updated ratesList
+	 * 
+	 */
     public boolean changeRatesList(ArrayList<Float> ratesList){
 		this.ratesList = ratesList;
 		return true;
@@ -46,10 +62,6 @@ public class Reservation{
     	return booked;
     }
     
-    /**
-	 * Get the total pay that the reservation will cost.
-     * @return the total cost of the reservation.
-	 */
     /**
 	 * Get the total pay that the reservation will cost.
      * @return the total cost of the reservation.
@@ -79,7 +91,7 @@ public class Reservation{
     }
     
     /**
-	 * Sets a room's info, given another room's details.
+	 * Sets a this reservations room info to the given room
 	 * @param room is an object that stores all the details of a room.
 	 */
     public void setRoomInfo(Room room) {
@@ -118,14 +130,29 @@ public class Reservation{
     	return this.room;
     }
     
-    public void setCostPerNightList(){
+    /**
+     * Sets the list for the cost per night of this reservation
+     */
+    private void setCostPerNightList(){
         for(int i = 0; i < getDaysStay().size(); i++){
             this.costPerNightList.add(this.room.getPrice() * this.ratesList.get(i));
         }
     }
     
+    /**
+     * getter for the cost per night 
+     * @return returns this reservations list of cost per nights
+     */
     public ArrayList<Float> getCostPerNightList(){
     	return this.costPerNightList;
+    }
+    
+    /**
+     * Getter for discount code that was applied to this reservation
+     * @return String representing the discount code for this reservation
+     */
+    public String getDiscountCode() {
+    	return this.discountCode;
     }
 }
 

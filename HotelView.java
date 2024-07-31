@@ -13,7 +13,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
-
+/**
+ * is the view for this hotel reservation system
+ * gets user input, and gives feedback
+ */
 public class HotelView {
 	private JFrame frame;
 	private ArrayList<JPanel> panelList = new ArrayList<JPanel>();
@@ -50,6 +53,8 @@ public class HotelView {
 	 * 18 -chooseHotelBookReservation
 	 * 19 -finalizeReservation
 	 * 20 - datePriceModifier
+	 * 21 - viewreservationButton
+	 * 22 - choosehotelViewReservationButton
 	 * */
 	private ArrayList<JButton> confirmationButtonList = new ArrayList<JButton>();
 	/*Legend
@@ -78,6 +83,7 @@ public class HotelView {
 	 * 1 - viewHotelReturn
 	 * 2 - manageHotelReturn
 	 * 3 - bookReservationReturn
+	 * 4 - ReservationInfoReturn
 	 * */
 	private  ArrayList<JTextArea> textAreaList = new ArrayList<JTextArea>();
 	/*Legend
@@ -106,6 +112,7 @@ public class HotelView {
 	 * 22 - roomListBookReservation
 	 * 23 -discountCode
 	 * 24 - rateForSpecificDay
+	 * 25 - viewReservationHoteList
 	 */
 	private ArrayList<JTextField> textFieldList = new ArrayList<JTextField>();
 	/*Legend
@@ -133,15 +140,21 @@ public class HotelView {
 	 * 21 -chooseRoomBookReservation
 	 * 22 - inputDiscountCode
 	 * 23 - datePriceModifier
+	 * 24 - chooseHotelViewREservation
 	 */
 	private ArrayList<JComboBox> comboBoxList = new ArrayList<JComboBox>();
 	/* 0 - datesRatesListManageHotel
-	 * 
+	 * 1 - reservationsListViewReservation
+	 */
+	
+	/**
+	 * Constructs the hotelView
+	 * creates all necessary components
 	 */
 	public HotelView() {
 		this.frame = new JFrame();
 		
-		this.frame.setSize(650, 650); // sets x and y dimensions
+		this.frame.setSize(800, 800); // sets x and y dimensions
 		this.frame.setLayout(new FlowLayout()); // thing for border
 		this.frame.setTitle("Main Menu"); // name of 
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // default is HIDE_ON_CLOSE, there is also NOTHING_ON_CLOSE
@@ -175,7 +188,9 @@ public class HotelView {
 		this.viewHotelMenuPanelSetup();
 		this.manageHotelMenuPanelSetup();
 		this.bookReservationPanelSetup();
+		this.viewReservationInfoSetup();
 		
+		this.panelList.get(0).add(this.buttonList.get(21));
 		//adding panels to frame
 		for(int i = 0; i < this.panelList.size(); i++) {
 			this.frame.add(this.panelList.get(i));
@@ -185,180 +200,328 @@ public class HotelView {
 		this.frame.setVisible(true); // lets it be visible
 	}
 	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setAddHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(0).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setViewHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(1).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setManageHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(2).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setBookReservationActnListener(ActionListener actionListener) {
 		this.buttonList.get(3).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setFinalHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(4).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setChooseHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(5).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setCheckAvailDateActnListener(ActionListener actionListener) {
 		this.buttonList.get(6).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setViewRoomInfoActnListener(ActionListener actionListener) {
 		this.buttonList.get(7).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setViewReservationActnListener(ActionListener actionListener) {
 		this.buttonList.get(8).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective JComboBox
+	 * @param actionListener actionListener for this JComboBox
+	 */
 	public void setViewReservationComboBox(ActionListener actionListener) {
 		this.comboBoxList.get(1).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setChooseManageHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(9).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setChangeNameActnListener(ActionListener actionListener) {
 		this.buttonList.get(10).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setAddStandardActnListener(ActionListener actionListener) {
 		this.buttonList.get(11).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setRemoveRoomActnListenerr(ActionListener actionListener) {
 		this.buttonList.get(12).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setUpdatePriceActnListener(ActionListener actionListener) {
 		this.buttonList.get(13).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setRemoveReservationActnListener(ActionListener actionListener) {
 		this.buttonList.get(14).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setRemoveHotelActnListener(ActionListener actionListener) {
 		this.buttonList.get(15).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setAddDeluxeActnListener(ActionListener actionListener) {
 		this.buttonList.get(16).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setAddExecutiveActnListener(ActionListener actionListener) {
 		this.buttonList.get(17).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setDateModifierActnListener(ActionListener actionListener) {
 		this.buttonList.get(20).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setDatesRatesListCmBxActnListener(ActionListener actionListener) {
 		this.comboBoxList.get(0).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmChangeNameYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(0).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmChangeNameNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(1).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddStandardYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(2).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddStandardNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(3).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveRoomYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(4).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveRoomNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(5).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmUpdatePriceYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(6).addActionListener(actionListener);
 	}
-	
+	/**
+	 * ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmUpdatePriceNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(7).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveReserveationYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(8).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveReservationNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(9).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveHotelYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(10).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmRemoveHotelNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(11).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddDeluxeYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(12).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddDeluxeNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(13).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddExecutiveYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(14).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmAddExecutiveNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(15).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmModifyRateOnDateYesActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(16).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setConfirmModifyRateOnDateNoActnListener(ActionListener actionListener) {
 		this.confirmationButtonList.get(17).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setChooseHotelBookReservationActnListener(ActionListener actionListener) {
 		this.buttonList.get(18).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setFinalizeBookingActnListener(ActionListener actionListener) {
 		this.buttonList.get(19).addActionListener(actionListener);
 	}
-	
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
+	public void setReservationInfoActnListener(ActionListener actionListener) {
+		this.buttonList.get(21).addActionListener(actionListener);
+	}
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
+	public void setChooseHotelReservationInfoActnListener(ActionListener actionListener) {
+		this.buttonList.get(22).addActionListener(actionListener);
+	}
+	/**
+	 * Adds ActionListener to this respective button
+	 * @param actionListener actionListener for this button
+	 */
 	public void setReturnActnListener(ActionListener actionListener) {
 		for(int i = 0; i < this.returnButtonList.size(); i++) {
 			this.returnButtonList.get(i).addActionListener(actionListener);
 		}
 	}
-	
+	/**
+	 * Sets the text to a text area
+	 * @param list text that will be displayed
+	 * @param areaIndex index of the JtextArea in textAreaList
+	 */
 	public void setDisplayText(String list, int areaIndex) {
 		this.textAreaList.get(areaIndex).setText(list);
 	}
-	
+	/**
+	 * makes all other panels not visible, except for chosen panel
+	 * @param panelIndex panel chosen to be currently viewable
+	 */
 	public void togglePanelVisibility(int panelIndex) {
 		for(int i = 0; i < this.panelList.size(); i++) {
 			if(i != panelIndex) {
@@ -369,7 +532,10 @@ public class HotelView {
 			}
 		}
 	}
-	
+	/**
+	 * Creates Panels and adjusts their characteristics uniformly
+	 * @param header header that will be placed at the top of the panel
+	 */
 	private void createPanel(String header) {
 		int n = this.panelList.size();
 		
@@ -378,7 +544,7 @@ public class HotelView {
 		this.panelList.get(n).setVisible(false);
 		this.panelList.get(n).setLayout(new FlowLayout(FlowLayout.LEFT, 100, 5));
 		this.panelList.get(n).setBackground(Color.LIGHT_GRAY);
-		this.panelList.get(n).setPreferredSize(new Dimension(400, 400));
+		this.panelList.get(n).setPreferredSize(new Dimension(400, 800));
 		this.panelList.get(n).setOpaque(true);
 		
 		this.panelList.get(n).add(new JLabel(header));
@@ -387,50 +553,72 @@ public class HotelView {
 			this.panelList.get(n).add(this.returnButtonList.get(this.returnButtonList.size()-1));
 		}
 	}
-	
+	/**
+	 * Adds a JTextArea to the list and creates their characteristics uniformly
+	 * @param initialText initialText in the JTextArea
+	 */
 	private void createTextArea(String initialText) {
 		this.textAreaList.add(new JTextArea(initialText));
-		System.out.println(this.textAreaList.size()-1 + " " + initialText);
 		for(int i = 0; i < this.textAreaList.size(); i++) {
 			this.textAreaList.get(i).setEditable(false);
 			this.textAreaList.get(i).setOpaque(false);
 			this.textAreaList.get(i).setFont(new Font("Dialog", Font.BOLD, 12));
 		}
 	}
-	
+	/**
+	 * Adds a text field to textFieldList and adjusts their characteristics uniformly
+	 */
 	private void createTextField() {
 		this.textFieldList.add(new JTextField());
 		this.textFieldList.get(this.textFieldList.size()-1).setColumns(20);
 	}
-	
+	/**
+	 * Adds a JButton to buttonList amd adjust their characteristics uniformly
+	 * @param buttonText
+	 */
 	private void createButton(String buttonText) {
 		this.buttonList.add(new JButton(buttonText));
 		this.buttonList.get(this.buttonList.size()-1).setPreferredSize(new Dimension(200, 25));
 		buttonList.get(this.buttonList.size()-1).setFocusable(false);
 	}
-	
+	/**
+	 * Adds a JButton to confirmButtonList amd adjust their characteristics uniformly
+	 * @param buttonText
+	 */
 	private void createConfirmationButton(String buttonText) {
 		this.confirmationButtonList.add(new JButton(buttonText));
 		this.confirmationButtonList.get(this.confirmationButtonList.size()-1).setPreferredSize(new Dimension(110, 25));
 		this.confirmationButtonList.get(this.confirmationButtonList.size()-1).setFocusable(false);
 		this.confirmationButtonList.get(this.confirmationButtonList.size()-1).setFont(new Font("Dialog", Font.BOLD, 8));
 	}
+	
+	/**
+	 * Clears all text fields
+	 */
 	public void clearTextFields() {
 		for(int i = 0; i < this.textFieldList.size(); i++) {
 			this.textFieldList.get(i).setText("");
 		}
 	}
-	
+	/**
+	 * clears all text areas
+	 */
 	public void clearTextArea() {
 		for(int i = 0; i < this.textAreaList.size(); i++) {
 			this.textAreaList.get(i).setText("");
 		}
 	}
-	
+	/**
+	 * clear a chosen textarea
+	 * @param textAreaIndex index of chosen text area in textAReaList
+	 */
 	public void clearTextArea(int textAreaIndex) {
 			this.textAreaList.get(textAreaIndex).setText("");
 	}
 	
+	/**
+	 * creates all components that will then be added to their respective panels
+	 */
 	private void createPanelComponents() {
 		this.createTextArea("");//TEXT AREA for hotel list for hotel creation panel
 		this.createTextField();//TEXT FIELD for hotel name input
@@ -536,12 +724,18 @@ public class HotelView {
 		}
 		this.comboBoxList.add(new JComboBox(dates));
 		
-		this.comboBoxList.add(new JComboBox());
+		this.comboBoxList.add(new JComboBox());//reservation list combobox
+		this.createButton("View Reservation Info");
+		
+		this.createTextField();
+		this.createTextArea("View Hits hotel's reservations");
+		this.createButton("View this hotel's reservations");
 	}
-	
+	/**
+	 * Adjusts the hotel creation panel, and adds all it's respective elements to it
+	 */
 	private void hotelCreationMenuPanelSetup() {
 		this.panelList.get(1).setLayout(new FlowLayout(FlowLayout.LEFT, 125, 5));
-		this.panelList.get(1).setPreferredSize(new Dimension(400, 450));
 		
 		JLabel hotelNameInputLbl = new JLabel("Hotel Name:");
 		JLabel numStanInputLbl = new JLabel("Number of Standard Rooms:");
@@ -565,7 +759,9 @@ public class HotelView {
 		this.panelList.get(1).add(this.buttonList.get(4));
 		this.panelList.get(1).add(this.textAreaList.get(1));
 	}
-	
+	/**
+	 * Adjusts the view hotel panel, and adds all it's respective elements to it
+	 */
 	private void viewHotelMenuPanelSetup() {
 		this.panelList.get(2).setPreferredSize(new Dimension(450, 800));
 		 
@@ -601,7 +797,7 @@ public class HotelView {
 		this.textAreaList.get(8).setVisible(false);
 		this.textAreaList.get(9).setVisible(false);
 		
-		
+		this.comboBoxList.get(1).setVisible(false);
 		this.textFieldList.get(6).setColumns(5);
 		this.buttonList.get(6).setPreferredSize(new Dimension(135, 25));
 		
@@ -616,16 +812,12 @@ public class HotelView {
 		this.panelList.get(2).add(this.textFieldList.get(7));
 		this.panelList.get(2).add(this.getButtonList().get(7));
 		this.panelList.get(2).add(this.textAreaList.get(6));
-		
-		this.panelList.get(2).add(this.textAreaList.get(7));
-		//this.panelList.get(2).add(this.textFieldList.get(8));
-		this.panelList.get(2).add(this.comboBoxList.get(1));
-		//this.panelList.get(2).add(this.getButtonList().get(8));
-		//this.panelList.get(2).add(this.textAreaList.get(8));
-		
+	
 		
 	}
-	
+	/**
+	 * Adjusts the hotel management panel, and adds all it's respective elements to it
+	 */
 	private void manageHotelMenuPanelSetup() {
 		this.panelList.get(3).setLayout(new FlowLayout(FlowLayout.LEFT, 10, 5));
 		this.panelList.get(3).setPreferredSize(new Dimension(400, 800));
@@ -634,16 +826,7 @@ public class HotelView {
 		this.panelList.get(3).add(this.textFieldList.get(9));
 		this.panelList.get(3).add(this.buttonList.get(9));
 		
-		/*
-		this.buttonList.get(10).setPreferredSize(new Dimension(100, 25));
-		this.buttonList.get(11).setPreferredSize(new Dimension(100, 25));
-		this.buttonList.get(12).setPreferredSize(new Dimension(100, 25));
-		this.buttonList.get(13).setPreferredSize(new Dimension(100, 25));
-		this.buttonList.get(14).setPreferredSize(new Dimension(100, 25));
-		this.buttonList.get(15).setPreferredSize(new Dimension(80, 25));
-		this.buttonList.get(16).setPreferredSize(new Dimension(80, 25));
-		*/
-		
+	
 		this.buttonList.get(13).setPreferredSize(new Dimension(145, 25));
 		this.getButtonList().get(15).setPreferredSize(new Dimension(350, 25));
 		
@@ -732,6 +915,9 @@ public class HotelView {
 		
 	}
 	
+	/**
+	 * Adjusts the reservation booking panel, and adds all it's respective elements to it
+	 */
 	private void bookReservationPanelSetup() {
 		this.panelList.get(4).setPreferredSize(new Dimension(400, 800));
 		
@@ -758,27 +944,57 @@ public class HotelView {
 		this.panelList.get(4).add(this.buttonList.get(19));
 		this.panelList.get(4).add(this.textAreaList.get(21));
 	}
-	
+	/**
+	 * Adjusts the view reservation panel, and adds all it's respective elements to it
+	 */
+	private void viewReservationInfoSetup() {
+		this.panelList.get(5).setLayout(new FlowLayout(FlowLayout.LEADING, 120, 5));
+		
+		this.panelList.get(5).add(this.textAreaList.get(25));
+		this.panelList.get(5).add(this.textFieldList.get(24));
+		this.panelList.get(5).add(this.buttonList.get(22));
+		this.panelList.get(5).add(this.textAreaList.get(7));
+		this.panelList.get(5).add(this.comboBoxList.get(1));
+	}
+	/**
+	 * Getter for the list of JtextAres
+	 * @return the list of JtextAres
+	 */
 	public ArrayList<JTextArea> getTextAreaList(){
 		return this.textAreaList;
 	}
-	
+	/**
+	 * Getter for list of JTextField
+	 * @return list of JTextField
+	 */
 	public ArrayList<JTextField> getTextFieldList(){
 		return this.textFieldList;
 	}
-	
+	/**
+	 * Getter for list of JButtons
+	 * @return list of buttons
+	 */
 	public ArrayList<JButton> getButtonList(){
 		return this.buttonList;
 	}
-	
+	/**
+	 * Getter for list of panels
+	 * @return list of panels
+	 */
 	public ArrayList<JPanel> getPanelList(){
 		return this.panelList;
 	}
-	
+	/**
+	 * Getter for list of confirmation buttons
+	 * @return list of buttons
+	 */
 	public ArrayList<JButton> getConfirmationButtonList(){
 		return this.confirmationButtonList;
 	}
-	
+	/**
+	 * Getter for list of JComboBox
+	 * @return list of comboboxes
+	 */
 	public ArrayList<JComboBox> getComboBoxList() {
 		return this.comboBoxList;
 	}

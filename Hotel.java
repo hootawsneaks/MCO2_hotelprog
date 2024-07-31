@@ -1,5 +1,8 @@
 import java.util.ArrayList;
-
+/**
+ * Hotel represents a hotel, it has rooms, where in the rooms can be booked into 
+ * A Hotel has a name, amounts for each room type, a base price, a list of rooms and reservations, and a list of the rates on each date
+ */
 public class Hotel{
     private String hotelName;
     private int numStandard;
@@ -11,7 +14,12 @@ public class Hotel{
     private ArrayList<Float> ratesList = new ArrayList<Float>();
     
 	/**
-	 * Class constructor for a hotel; hotel name, number of rooms, and price need to be indicated.
+	 * Class constructor for a hotel; hotel name, number of each room type, and price need to be indicated.
+	 * @param hotelName the hotel's unique name
+	 * @param numStandard the number of standard rooms
+	 * @param numDeluxe the number of deluxe rooms
+	 * @param numExec the number of executive rooms
+	 * @param price the hotel's base price
 	 */
     public Hotel(String hotelName, int numStandard, int numDeluxe, int numExec, float price){
         this.hotelName = hotelName;
@@ -24,12 +32,21 @@ public class Hotel{
         this.createRooms(numStandard, numDeluxe, numExec);
     }
     
-    public void createRates(){
+    
+    /**
+     * sets the hotel's list of rates to the default
+     */
+    private void createRates(){
 		for(int i = 0; i < 30; i++){
 			this.ratesList.add(1f);
 		}
 	}
     
+    /**
+     * To modify the rate on a certain date
+     * @param dateToModify the date that will be modified
+     * @param newRate the new rate that will be applied
+     */
     public void modifyRatesList(int dateToModify, float newRate) {
     	for(int i = 0; i < this.ratesList.size(); i++) {
     		if(i+1 == dateToModify) {
@@ -38,7 +55,14 @@ public class Hotel{
     	}
     }
     
-    public boolean createRooms(int numStandard, int numDeluxe, int numExec){
+    /**
+     * creates the hotel's rooms based on the given parameters
+     * @param numStandard number of standard rooms to create
+     * @param numDeluxe number of deluxe rooms to create
+     * @param numExec number of executive rooms to create
+     * @return a boolean value for if the creation was successful
+     */
+    private boolean createRooms(int numStandard, int numDeluxe, int numExec){
     	if((numStandard + numDeluxe + numExec) < 1 || (numStandard + numDeluxe + numExec) > 50)
     	{
     		return false;
@@ -63,16 +87,13 @@ public class Hotel{
         return true;
     }
     
-    //books a reservation makes all its info and books the dates for the chosen room
 	/**
 	 *  Books a reservation via a given name, check in and out date, and a room number.
 	 *  The check in date must always be earlier than the check out date.
-	 * 
 	 *  @param guestName a string that signifies the one reserving the room.
 	 *  @param checkIn an integer from 1-30 that signifies the day the guest has checked in.
 	 *  @param checkOut an integer from 2-31 that signifies the day the guest will check out.
 	 *  @param roomNum an integer that signifies the chosen room that will be reserved.
-	 * 
 	 *  @return true if booked successfully, false if otherwise.
 	 */
     public boolean bookReservation(String guestName, int checkIn, int checkOut, int roomNum, String discountCode) {
@@ -116,8 +137,7 @@ public class Hotel{
  	   return true;
     }
     
-    //with guest name
-    // removes reservation, adjusts dates boooked of room
+    // removes reservation, adjusts dates booked of room
 	/**
 	 *  Removes a reservation given by a certain guest's name
 	 * 	@param guestName is a string that is within a reservation; used for searching the list.
@@ -158,7 +178,6 @@ public class Hotel{
     }
     
     
-    //numRooms is num of rooms to add
 	/**
 	 * Adds rooms to a hotel depending on the amount wanted if the max rooms have not been reached.
 	 * @param numRooms is an integer, the number of rooms that the user wants to be added.
@@ -177,7 +196,6 @@ public class Hotel{
     	return true;
     }
     
-    //removes a room if that room no reservation
 	/**
 	 * Removes rooms that don't have a reservation, given an integer.
 	 * @param roomNum is an integer; the amount of rooms that the user wants to be removed.
@@ -209,7 +227,6 @@ public class Hotel{
     	}
     }
    
-    //changes hotel name if no other same name
 	/**
 	 * Changes the name of the hotel name.
 	 * @param newName is a string that signifies the new name of the hotel.
@@ -220,10 +237,7 @@ public class Hotel{
     	return true;
     }
     
-    //list of rooms in existence
-	/**
-	 * Shows all the name of the rooms that exist within a hotel.
-	 */
+    /*
     public void showRoomList() {
     	int n = 1;
     	for(int i = 0; i < this.roomsList.size(); i++) {
@@ -240,8 +254,8 @@ public class Hotel{
 
     	System.out.println();
     }
+    */
     
-    //gives index of a room given its roomNum
 	/**
 	 * returns the index of a room, given a room number.
 	 * @param roomNum is an integer; the number of the room that the user wants to find the index of.
@@ -258,7 +272,6 @@ public class Hotel{
     	return roomIndex;
     }
     
-    //gives index of a reservation give the guest name
 	/**
 	 * returns the index of a reservation, given the guest's name.
 	 * @param guest is a string, which is the guest's name in the reservation.
@@ -300,7 +313,6 @@ public class Hotel{
     	return rooms;
     }
      
-    //returns  list of rooms good from dates checkin to checkut - 1
 	/**
 	 * Returns the list of rooms that aren't booked, within a span of time greater than a 1 day.
 	 * @param checkIn is an integer; the start of the timespan
@@ -335,7 +347,6 @@ public class Hotel{
     	return rooms;
     }
     
-    //change room if no reservations across the whole hotel
 	/**
 	 * Changes the price of staying in a room in the hotel, depending on the new given price.
 	 * @param price is the new price that the user wants it changed to.
@@ -393,27 +404,44 @@ public class Hotel{
     public String getHotelName() {
     	return this.hotelName;
     }
-    
+    /**Getter for the number of standard rooms
+     * @return int representing number of standard rooms for this hotel
+     */
     public int getNumStandard() {
     	return this.numStandard;
     }
-    
+    /**
+     * Getter for number of deluxe rooms
+     * @return int representing the number of deluxe rooms
+     */
     public int getNumDeluxe() {
     	return this.numDeluxe;
     }
-    
+    /**
+     * getter for the number of executive rooms
+     * @return int representing the number of executive rooms
+     */
     public int getNumExec() {
     	return this.numExec;
     }
-    
+    /**
+     * Setter for incrementing or decrementing the number of standard rooms
+     * @param numAddDeluxe int that num standard rooms will be adjusted by
+     */
     public void setNumStandard(int numAddStandard) {
     	this.numStandard += numAddStandard;
     }
-    
+    /**
+     * Setter for incrementing or decrementing the number of deluxe rooms
+     * @param numAddDeluxe int that numDeluxe will be adjusted by
+     */
     public void setNumDeluxe(int numAddDeluxe) {
     	this.numDeluxe += numAddDeluxe;
     }
-    
+    /**
+     * Setter for incrementing or decrementing the number of executive rooms
+     * @param numAddExecutive int that numExective will be adjusted by
+     */
     public void setNumExecutive(int numAddExecutive) {
     	this.numExec += numAddExecutive;
     }
@@ -425,7 +453,10 @@ public class Hotel{
     public float getPrice() {
     	return this.price;
     }
-    
+    /**
+     * Getter for the rates list of this hotel
+     * @return the rates list for this hotel
+     */
     public ArrayList<Float> getRatesList(){
 		return this.ratesList;
 	}

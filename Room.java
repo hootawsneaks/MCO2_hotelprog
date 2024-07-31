@@ -1,5 +1,8 @@
 import java.util.ArrayList;
-
+/**
+ * Room is an object representing the room of a hotel
+ * It has a name and a price, and a roomType, and has a list of the dates it can be booked on.
+ */
 public class Room{
     private int roomName;
     private ArrayList<Integer> datesBookedList = new ArrayList<Integer>(); //1-31
@@ -7,9 +10,10 @@ public class Room{
     private String roomType;
 
     /**
-     * Class constructor for a room. Has 2 variables: The room name and the price of the room.
+     * Class constructor for a room. Has a name unique to other rooms in the hotel, has a type, and a price depending on it's type
      * @param roomName is the name of the room
      * @param price is the price of the room
+     * @param roomType is the type of the room (standard, deluxe, executive)
      */
     public Room(int roomName, float price, String roomType){
         this.roomName = roomName;
@@ -28,7 +32,7 @@ public class Room{
     
     /**
      * Given a span of days, makes these days considered booked by putting 
-     * it in a list called datesBookedList
+     * it in a rooms datesBookedList attribute
      * @param checkIn is the start of the timespan
      * @param checkOut is the end of the timespan
      */
@@ -99,6 +103,10 @@ public class Room{
     	return this.price;
     }
     
+    /**
+     * Get the roomType of the room
+     * @return a String representing the roomType
+     */
     public String getRoomType() {
     	return this.roomType;
     }
